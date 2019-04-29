@@ -35,13 +35,9 @@ public class User implements Serializable
 	private String email;
 	@NotEmpty
 	private String password;
-	@SuppressWarnings("unused")
 	private String profilePic;
-	@NotEmpty
 	private boolean isVerified;
-	@SuppressWarnings("unused")
 	private LocalDateTime registrationDate;
-	@SuppressWarnings("unused")
 	private LocalDateTime modifiedDate;
 	
 }

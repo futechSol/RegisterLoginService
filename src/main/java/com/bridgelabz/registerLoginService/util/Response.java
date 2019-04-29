@@ -2,48 +2,26 @@ package com.bridgelabz.registerLoginService.util;
 
 import java.io.Serializable;
 import org.springframework.stereotype.Component;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @Component
+@Getter @Setter @ToString
 public class Response implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
 	private int statusCode;
 	private String statusMessage;
-    
-	/**
-	 * default constructor
-	 */
-	public Response() {}
-	/**
-	 * parameterized constructor
-	 * @param statusCode
-	 * @param statusMessage
-	 */
-	public Response(int statusCode, String statusMessage) {
+	private String token;
+	
+	public Response () {}
+	
+	public Response(int statusCode, String statusMessage, String token) {
 		super();
 		this.statusCode = statusCode;
 		this.statusMessage = statusMessage;
-	}
-
-	public int getStatusCode() {
-		return statusCode;
-	}
-
-	public void setStatusCode(int statusCode) {
-		this.statusCode = statusCode;
-	}
-
-	public String getStatusMessage() {
-		return statusMessage;
-	}
-
-	public void setStatusMessage(String statusMessage) {
-		this.statusMessage = statusMessage;
-	}
-	
-	@Override
-	public String toString() {
-		return "Response [statusCode=" + statusCode + ", statusMessage=" + statusMessage + "]";
+		this.token = token;
 	}
 }
