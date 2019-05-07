@@ -8,9 +8,11 @@ import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Exchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.client.RestTemplate;
 
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -26,7 +28,7 @@ public class AppConfig {
 	private String userQueue;
 	@Value("${spring.rabbitmq.user.routingKey}")
 	private String userRoutingKey;
-	
+
 	/**
 	 * swagger bean
 	 * @return
@@ -35,7 +37,7 @@ public class AppConfig {
 	public Docket productApi() {
 		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.basePackage("com.bridgelabz.registerLoginService")).build();
 	}
-	
+
 	/**
 	 * ModelMapper to map the DTO to actual model
 	 * @return instance of ModelMapper
@@ -46,7 +48,7 @@ public class AppConfig {
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 		return modelMapper;
 	}
-	
+
 	/**
 	 * BCrypt instance to encode the user password
 	 * @return BCrypt instance 
@@ -55,7 +57,7 @@ public class AppConfig {
 	public BCryptPasswordEncoder encoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
+
 	//---------------------------- amqp config ------------------------------------------
 	@Bean
 	Exchange exchage() {
@@ -71,5 +73,15 @@ public class AppConfig {
 	Binding userQueueBinding(Queue userQueue, DirectExchange exchange) {
 		return BindingBuilder.bind(userQueue).to(exchange).with(userRoutingKey);
 	}
-    //-------------------------------------------------------------------------------------------
+	
+	//----------------------------------RestTemplate Bean-------------------------------------------------------
+	/**
+	 * restTemplate bean to call NoteMicro-service
+	 * @return
+	 */
+	@Bean
+	@LoadBalanced		// Load balance between service instances running at different ports.
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
+	}
 }
